@@ -1,0 +1,30 @@
+{
+    "name": "miphant",
+    "productName": "MiPhant",
+    "version": "1.0.0",
+    "description": "MiPhant is a software that runs applications developed in PHP for desktop Linux Debian, Linux Ubuntu and Windows.",
+    "main": "main.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "electron .",
+        "package-win32": "electron-forge package --platform=win32",
+        "package": "electron-forge package",
+        "make-win32": "electron-forge make --platform=win32",
+        "make": "electron-forge make"
+    },
+    "author": {
+        "name": "Murilo Gomes Julio",
+        "email": "contato@mugomes.com.br",
+        "contact": "https://www.mugomes.com.br/p/contato.html",
+        "url": "https://www.mugomes.com.br"
+    },
+    "copyright": "Copyright (C) 2025 Murilo Gomes Julio",
+    "homepage": "https://github.com/mugomes/miphant/",
+    "license": "MIT",
+    "devDependencies": {
+        "@electron-forge/cli": "^7.8.1",
+        "@electron-forge/maker-zip": "^7.8.1",
+        "@electron-forge/plugin-auto-unpack-natives": "^7.8.1",
+        "electron": "^37.1.0"
+    }
+}

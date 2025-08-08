@@ -1,0 +1,9 @@
+{
+    "Menu":
+    {
+        "Close": {
+            "script": "window.close()",
+            "key": "ALT+F4"
+        }
+    }
+}

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Downloading PHP-CLI</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #f1f1f1;
+            display: block;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            width: 400px;
+            text-align: center;
+        }
+
+        h3 {
+            margin-top: 17px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        p {
+            color: #555;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .progress-wrapper {
+            background-color: #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 25px;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #0078D7, #00BCF2);
+            color: white;
+            font-size: 13px;
+            line-height: 25px;
+            text-align: center;
+            transition: width 0.3s ease-in-out;
+        }
+
+        .loading-text {
+            font-size: 13px;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+    <h3 id="label1">Initializing the Software</h3>
+    <p id="label2">Downloading PHP-CLI required for system operation.</p>
+
+    <div class="progress-wrapper">
+        <div class="progress-bar" id="progresso">0%</div>
+    </div>
+
+    <div id="label3" class="loading-text">Preparing environment...</div>
+
+    <script>
+        miphant.translate(document.title).then((value) => {
+            document.title = value;
+        });
+        miphant.translate(document.getElementById('label1').innerHTML).then((value) => {
+            document.getElementById('label1').innerHTML = value;
+        });
+        miphant.translate(document.getElementById('label2').innerHTML).then((value) => {
+            document.getElementById('label2').innerHTML = value;
+        });
+        miphant.translate(document.getElementById('label3').innerHTML).then((value) => {
+            document.getElementById('label3').innerHTML = value;
+        });
+        
+        const progresso = document.getElementById('progresso');
+
+        miphant.onProgresso((percent) => {
+            progresso.style.width = percent + '%';
+            progresso.innerText = percent + '%';
+        });
+
+        miphant.baixarPHP();
+    </script>
+</body>
+
+</html>

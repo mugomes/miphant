@@ -1,0 +1,64 @@
+{
+    "Examples": {
+        "Home page": {
+            "page": "index.php"
+        },
+        "separator1": {},
+        "Open": {
+            "page": "openfile.php",
+            "key": "CTRL+O"
+        },
+        "Save": {
+            "page": "savefile.php",
+            "key": "CTRL+B"
+        },
+        "Message": {
+            "page": "message.php"
+        },
+        "separator2": {},
+        "Cookies": {
+            "page": "cookies.php",
+            "key": "CTRL+K",
+            "newwindow": true
+        },
+        "Include": {
+            "page": "include.php",
+            "key": "CTRL+I"
+        },
+        "PHPInfo": {
+            "page": "phpinfo.php",
+            "key": "CTRL+P",
+            "newwindow": true
+        },
+        "No Cache": {
+            "page": "nocache.php",
+            "key": "CTRL+S"
+        },
+        "Session": {
+            "page": "session.php",
+            "key": "CTRL+SHIFT+S"
+        },
+        "SQLite3": {
+            "page": "sqlite.php",
+            "key": "CTRL+ALT+S"
+        },
+        "Timezone": {
+            "page": "timezone.php",
+            "key": "CTRL+T"
+        },
+        "separator3": {},
+        "Post Form": {
+            "page": "formpost.php"
+        },
+        "GET Form": {
+            "page": "formget.php"
+        }
+    },
+    "About":
+    {
+        "Support MiPhant": {
+            "url": "https://www.mugomes.com.br/p/apoie.html",
+            "key": "F1"
+        }
+    }
+}
