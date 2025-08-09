@@ -80,7 +80,7 @@ const createWindow = () => {
     miphantNewWindow('', config.app.largura, config.app.altura, config.app.redimensionar, config.app.quadro, false);
 }
 
-// Aplica permissão de execução para o MIServidor
+// Aplica permissão de execução para o PHP
 function perm(filephp) {
     if (config.server.perm) {
         spawn('chmod', ['+x', filephp]);
@@ -92,7 +92,7 @@ function perm(filephp) {
     }
 }
 
-// Inicia o MIServidor
+// Inicia o MiPhantServer
 function startMiPhantServer(win) {
     let sMiPhantServer;
     let sFilePHPINI = path.join(miphantPath, '/php/php.ini');
@@ -212,7 +212,7 @@ function miphantNewWindow(url, width, height, resizable, frame, hide) {
     sNewWindow.setMenu(null);
 
     if (sStartApp) {
-        if (fs.existsSync(path.join(miphantPath, '/php/php'))) {
+        if (fs.existsSync(path.join(miphantPath, '/php/php')) || fs.existsSync(path.join(miphantPath, '/php/php.exe'))) {
             startMiPhantServer(sNewWindow);
         } else {
             sNewWindow.hide();
@@ -461,21 +461,21 @@ function createMenuContext(win) {
 
 // Função para encerrar o processo com base na porta
 function killProcessByPort(port) {
-    let miServidorClose;
+    let miphantserverClose;
     if (sPlatform == 'linux') {
-        miServidorClose = spawn('lsof', ['-ti:' + port, '|', 'xargs', 'kill'], { shell: true });
+        miphantserverClose = spawn('lsof', ['-ti:' + port, '|', 'xargs', 'kill'], { shell: true });
 
-        miServidorClose.stderr.on('data', (data) => {
+        miphantserverClose.stderr.on('data', (data) => {
             console.log(milang.traduzir('Error terminating process on port:'), sPort);
             return;
         });
 
-        miServidorClose.on('error', (err) => {
+        miphantserverClose.on('error', (err) => {
             console.error(milang.traduzir('Error terminating process on port:'), port, err.message);
             return;
         });
 
-        miServidorClose.on('close', (code) => {
+        miphantserverClose.on('close', (code) => {
             console.log(milang.traduzir('The server was terminated with the code:'), code);
             return;
         });
@@ -484,7 +484,7 @@ function killProcessByPort(port) {
     }
 }
 
-function stopMIServidor() {
+function stopMiPhantServer() {
     if (miphantserverProcess) {
         killProcessByPort(sPort); // Encerra todos os processos do servidor que estão sob a mesma porta
         console.log(milang.traduzir('Server stopped.'));
@@ -504,11 +504,11 @@ app.whenReady().then(() => {
 // Se for MACOS não roda esse comando
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
-        stopMIServidor();
+        stopMiPhantServer();
         app.quit();
     }
 });
 
 app.on('before-quit', () => {
-    stopMIServidor();
+    stopMiPhantServer();
 });
