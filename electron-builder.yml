@@ -1,0 +1,23 @@
+asar: true
+files:
+  - "!.git/**/*"
+  - "!.github/**/*"
+  - "!app/**/*"
+  - "!php/**/*"
+  - "!config.sh"
+extraResources:
+  - "./app/"
+  - "./php/"
+  - "./LICENSE.md"
+  - "./README.md"
+win:
+  artifactName: ${productName}-${version}-win.${ext}
+  icon: icon/miphant.ico
+  target:
+    - "dir"
+linux:
+  artifactName: ${productName}-${version}-linux.${ext}
+  icon: icon/miphant.png
+  target:
+    - "dir"
+publish: null

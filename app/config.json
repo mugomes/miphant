@@ -1,0 +1,37 @@
+{
+	"app": {
+		"id": "miphant",
+		"name": "MiPhant",
+		"width": 800,
+		"height": 600,
+		"resizable": true,
+		"frame": true,
+		"icon": "miphant.png",
+		"disableAccelerationHardware": true,
+		"author": {
+			"name": "Murilo Gomes Julio",
+			"email": "contato@mestredainfo.com.br",
+			"contact": "https://www.mugomes.com.br/p/contato.html",
+			"url": "https://www.mugomes.com.br"
+		},
+		"homepage": "https://github.com/mugomes/miphant/",
+		"license": "MIT",
+		"copyright": "Copyright (C) 2025 Murilo Gomes Julio"
+	},
+	"server": {
+		"perm": false,
+		"linux": {
+			"type": "common",
+			"version": "8.4.8"
+		},
+		"win32": {
+			"type": "spc-max",
+			"version": "8.4.8"
+		},
+		"router": false
+	},
+	"dev": {
+		"menu": true,
+		"tools": false
+	}
+}

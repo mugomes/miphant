@@ -1,0 +1,23 @@
+{
+    "name": "miphant",
+    "productName": "MiPhant",
+    "version": "4.0.0",
+    "description": "MiPhant is a software that runs applications developed in PHP for desktop Linux Debian, Linux Ubuntu and Windows.",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron .",
+        "dist": "electron-builder --win --linux"
+    },
+    "author": {
+        "name": "Murilo Gomes Julio",
+        "email": "mugomesoficial@gmail.com",
+        "url": "https://mugomes.github.io"
+    },
+    "copyright": "Copyright (C) 2025 Murilo Gomes Julio",
+    "homepage": "https://github.com/mugomes/miphant/",
+    "license": "MIT",
+    "devDependencies": {
+        "electron": "^38.1.2",
+        "electron-builder": "^26.0.12"
+    }
+}
