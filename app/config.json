@@ -10,24 +10,15 @@
 		"disableAccelerationHardware": true,
 		"author": {
 			"name": "Murilo Gomes Julio",
-			"email": "contato@mestredainfo.com.br",
-			"contact": "https://www.mugomes.com.br/p/contato.html",
-			"url": "https://www.mugomes.com.br"
+			"email": "mugomesoficial@gmail.com",
+			"url": "https://mugomes.github.io"
 		},
 		"homepage": "https://github.com/mugomes/miphant/",
 		"license": "MIT",
 		"copyright": "Copyright (C) 2025 Murilo Gomes Julio"
 	},
 	"server": {
-		"perm": false,
-		"linux": {
-			"type": "common",
-			"version": "8.4.8"
-		},
-		"win32": {
-			"type": "spc-max",
-			"version": "8.4.8"
-		},
+		"perm": true,
 		"router": false
 	},
 	"dev": {
