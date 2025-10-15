@@ -59,8 +59,8 @@ let miphantserverProcess;
 let sPort;
 
 function createMenu(sWin, sFileMenu) {
-    if (fs.existsSync(path.join(miphantPath, '/app/config/', `${sFileMenu}.json`))) {
-        fs.readFile(path.join(miphantPath, '/app/config/', `${sFileMenu}.json`), (err, data) => {
+    if (fs.existsSync(path.join(miphantPath, '/app/menus/', `${sFileMenu}.json`))) {
+        fs.readFile(path.join(miphantPath, '/app/menus/', `${sFileMenu}.json`), (err, data) => {
             if (err) {
                 console.error(milang.traduzir('Error reading JSON file'), err);
                 return;
@@ -232,7 +232,7 @@ function miphantNewWindow(url, width, height, resizable, frame, hide) {
         sNewWindow.loadURL(`${sServerName}/${url.replace(sServerName, '')}`);
     }
 
-    if (url.replace(sServerName, '') && fs.existsSync(path.join(miphantPath, '/app/config/', url.replace(sServerName, '').replace('.php', '.json')))) {
+    if (url.replace(sServerName, '') && fs.existsSync(path.join(miphantPath, '/app/menus/', url.replace(sServerName, '').replace('.php', '.json')))) {
         createMenu(sNewWindow, url.replace(sServerName, '').replace('.php', ''));
     }
 
