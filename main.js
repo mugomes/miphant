@@ -262,6 +262,15 @@ function getMenuTemplate(win, menuData) {
             label: milang.traduzir('Dev'),
             submenu: [
                 {
+                    label: milang.traduzir('Build'),
+                    click: () => {
+                        win.loadURL(sServerName + '/build/build.php');
+                    }
+                },
+                {
+                    type: 'separator'
+                },
+                {
                     label: milang.traduzir('Refresh'),
                     accelerator: 'F5',
                     click: () => {
