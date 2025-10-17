@@ -4,11 +4,12 @@ files:
   - "!.github/**/*"
   - "!app/**/*"
   - "!php/**/*"
+  - "!packages/**/*"
   - "!config.sh"
 extraResources:
   - "./app/"
   - "./php/"
-  - "./LICENSE.md"
+  - "./LICENSE"
   - "./README.md"
 win:
   artifactName: ${productName}-${version}-win.${ext}
