@@ -138,6 +138,9 @@ php/LICENSE
 php/php
 php/php.exe
 
+# packages
+packages/
+
 # package-lock.json
 package-lock.json
 
