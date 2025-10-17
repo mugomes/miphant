@@ -2,6 +2,7 @@
 	"app": {
 		"id": "miphant",
 		"name": "MiPhant",
+		"version": "4.0.0",
 		"width": 800,
 		"height": 600,
 		"resizable": true,
@@ -18,7 +19,7 @@
 		"copyright": "Copyright (C) 2025 Murilo Gomes Julio"
 	},
 	"server": {
-		"perm": true,
+		"perm": false,
 		"router": false
 	},
 	"dev": {
