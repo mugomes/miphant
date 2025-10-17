@@ -12,6 +12,7 @@
     "netstat exited with error code": "netstat saiu com código de erro",
     "PHP server started successfully.": "Servidor PHP iniciado com sucesso.",
     "Dev": "Dev",
+    "Build": "Compilar",
     "Refresh": "Atualizar",
     "Tools": "Ferramentas",
     "Cut": "Recortar",
@@ -25,5 +26,16 @@
     "Downloading PHP-CLI": "Baixando PHP-CLI",
     "Initializing the Software": "Inicializando o Software",
     "Downloading PHP-CLI required for system operation.": "Baixando o PHP-CLI para o funcionamento do sistema.",
-    "Preparing environment...": "Preparando ambiente..."
+    "Preparing environment...": "Preparando ambiente...",
+    "Generating packages...": "Gerando pacotes...",
+    "Downloading Files...": "Baixando Arquivos...",
+    "Removing Project Older...": "Removendo Projetos Antigos...",
+    "Extracting files...": "Extraindo arquivos...",
+    "Deleting app folder...": "Excluindo a pasta app...",
+    "Copying the project app folder": "Copiando o projeto para a pasta app",
+    "Deleting build folder...": "Excluindo pasta de compilação...",
+    "Compacting project for Linux...": "Compactando projeto para Linux...",
+    "Compacting project for Win...": "Compactando projeto para Windows...",
+    "Finish!": "Finish!",
+    "Could not open ZIP file.": "Could not open ZIP file."
 }
