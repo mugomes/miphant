@@ -20,72 +20,105 @@ if (!file_exists(dirname(__FILE__, 3) . '/packages/')) {
     mkdir(dirname(__FILE__, 3) . '/packages/');
 }
 
-// Create folder Linux in Packages
-if (!file_exists($pathProjects['linux'])) {
-    mkdir($pathProjects['linux']);
+if (!empty($pathProjects['linux'])) {
+    // Create folder Linux in Packages
+    if (!file_exists($pathProjects['linux'])) {
+        mkdir($pathProjects['linux']);
+    }
+
+    // Download MiPhant
+    echo translate('Downloading Files...') . $newLine;
+    if (!file_exists($pathProjects['linux'] . 'miphant.zip')) {
+        downloadFile($urlDownload['linux'], $pathProjects['linux'] . 'miphant.zip');
+    }
+
+    // Remove project older
+    echo translate('Removing Project Older...') . $newLine;
+    if (file_exists($pathProjects['linux'] . $MIPHANT_APP_ID . '/')) {
+        excluirRecursivamente($pathProjects['linux'] . $MIPHANT_APP_ID . '/');
+    }
+
+    // Extract MiPhant
+    echo translate('Extracting files...') . $newLine;
+    extractFile($pathProjects['linux']);
+
+    // Remove App
+    echo translate('Deleting app folder...') . $newLine;
+    excluirRecursivamente($pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/app/');
+    excluirRecursivamente($pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/php/');
+
+    // Copy App
+    echo translate('Copying the project app folder') . $newLine;
+    copyFolder(dirname(__FILE__, 2), $pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/app/');
+    copyFolder(dirname(__FILE__, 3) . '/php/', $pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/php/');
+    unlink($pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/php/php.exe');
+
+    // Remove Build
+    echo translate('Deleting build folder...') . $newLine;
+    excluirRecursivamente($pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/app/build/');
+
+    // Rename Executable
+    echo translate('Renaming Executable') . $newLine;
+    rename($pathProjects['linux'] . $MIPHANT_APP_ID . '/miphant', $pathProjects['linux'] . $MIPHANT_APP_ID . '/' . getConfig('app', 'id'));
+
+    // Obfuscator
+    include_once(__DIR__ . '/obfuscator.php');
+
+    // Zip Projects
+    echo translate('Compacting project for Linux...') . $newLine;
+    if (zipFolder($pathProjects['linux'] . $MIPHANT_APP_ID, $pathProjects['linux']  . $MIPHANT_APP_ID . '-' . $MIPHANT_APP_VERSION . '-linux.zip')) {
+        echo translate('Finish!') . $newLine;
+    }
 }
 
-// Create folder Win in Packages
-if (!file_exists($pathProjects['win'])) {
-    mkdir($pathProjects['win']);
-}
+if (!empty($pathProjects['win'])) {
+    echo $newLine;
+    // Create folder Win in Packages
+    if (!file_exists($pathProjects['win'])) {
+        mkdir($pathProjects['win']);
+    }
 
+    // Download MiPhant
+    if (!file_exists($pathProjects['win'] . 'miphant.zip')) {
+        echo translate('Downloading Files...') . $newLine;
+        downloadFile($urlDownload['win'], $pathProjects['win'] . 'miphant.zip');
+    }
 
-// Download MiPhant
-echo translate('Downloading Files...') . $newLine;
-if (!file_exists($pathProjects['linux'] . 'miphant.zip')) {
-    downloadFile($urlDownload['linux'], $pathProjects['linux'] . 'miphant.zip');
-}
+    // Remove project older
+    if (file_exists($pathProjects['win'] . $MIPHANT_APP_ID . '/')) {
+        echo translate('Removing Project Older...') . $newLine;
+        excluirRecursivamente($pathProjects['win'] . $MIPHANT_APP_ID . '/');
+    }
 
-// Download MiPhant
-if (!file_exists($pathProjects['win'] . 'miphant.zip')) {
-    downloadFile($urlDownload['win'], $pathProjects['win'] . 'miphant.zip');
-}
+    // Extract MiPhant
+    echo translate('Extracting files...') . $newLine;
+    extractFile($pathProjects['win']);
 
-// Remove project older
-echo translate('Removing Project Older...') . $newLine;
-if (file_exists($pathProjects['linux'] . $MIPHANT_APP_ID . '/')) {
-    excluirRecursivamente($pathProjects['linux'] . $MIPHANT_APP_ID . '/');
-}
+    // Remove App
+    echo translate('Deleting app folder...') . $newLine;
+    excluirRecursivamente($pathProjects['win'] . $MIPHANT_APP_ID . '/resources/app/');
+    excluirRecursivamente($pathProjects['win'] . $MIPHANT_APP_ID . '/resources/php/');
 
-if (file_exists($pathProjects['win'] . $MIPHANT_APP_ID . '/')) {
-    excluirRecursivamente($pathProjects['win'] . $MIPHANT_APP_ID . '/');
-}
+    // Copy App
+    echo translate('Copying the project app folder') . $newLine;
+    copyFolder(dirname(__FILE__, 2), $pathProjects['win'] . $MIPHANT_APP_ID . '/resources/app/');
+    copyFolder(dirname(__FILE__, 3) . '/php/', $pathProjects['win'] . $MIPHANT_APP_ID . '/resources/php/');
+    unlink($pathProjects['win'] . $MIPHANT_APP_ID . '/resources/php/php');
 
-// Extract MiPhant
-echo translate('Extracting files...') . $newLine;
-extractFile($pathProjects['linux']);
-extractFile($pathProjects['win']);
+    // Remove Build
+    echo translate('Deleting build folder...') . $newLine;
+    excluirRecursivamente($pathProjects['win'] . $MIPHANT_APP_ID . '/resources/app/build/');
 
-// Remove App
-echo translate('Deleting app folder...') . $newLine;
-excluirRecursivamente($pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/app/');
-excluirRecursivamente($pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/php/');
-excluirRecursivamente($pathProjects['win'] . $MIPHANT_APP_ID . '/resources/app/');
-excluirRecursivamente($pathProjects['win'] . $MIPHANT_APP_ID . '/resources/php/');
+    // Rename Executable
+    echo translate('Renaming Executable') . $newLine;
+    rename($pathProjects['win'] . $MIPHANT_APP_ID . '/MiPhant.exe', $pathProjects['win'] . $MIPHANT_APP_ID . '/' . getConfig('app', 'id') . '.exe');
 
-// Copy App
-echo translate('Copying the project app folder') . $newLine;
-copyFolder(dirname(__FILE__, 2), $pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/app/');
-copyFolder(dirname(__FILE__, 3) . '/php/', $pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/php/');
-copyFolder(dirname(__FILE__, 2), $pathProjects['win'] . $MIPHANT_APP_ID . '/resources/app/');
-copyFolder(dirname(__FILE__, 3) . '/php/', $pathProjects['win'] . $MIPHANT_APP_ID . '/resources/php/');
+    // Obfuscator
+    include_once(__DIR__ . '/obfuscator.php');
 
-// Remove Build
-echo translate('Deleting build folder...') . $newLine;
-excluirRecursivamente($pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/app/build/');
-excluirRecursivamente($pathProjects['win'] . $MIPHANT_APP_ID . '/resources/app/build/');
-
-// Obfuscator
-include_once(__DIR__ . '/obfuscator.php');
-
-// Zip Projects
-echo translate('Compacting project for Linux...') . $newLine;
-if (zipFolder($pathProjects['linux'] . $MIPHANT_APP_ID, $pathProjects['linux']  . $MIPHANT_APP_ID . '-' . $MIPHANT_APP_VERSION . '-linux.zip')) {
-    echo translate('Finish!') . $newLine;
-}
-
-echo translate('Compacting project for Win...') . $newLine;
-if (zipFolder($pathProjects['win'] . $MIPHANT_APP_ID, $pathProjects['win']  . $MIPHANT_APP_ID . '-' . $MIPHANT_APP_VERSION . '-win.zip')) {
-    echo translate('Finish!') . $newLine;
+    // Zip Projects
+    echo translate('Compacting project for Win...') . $newLine;
+    if (zipFolder($pathProjects['win'] . $MIPHANT_APP_ID, $pathProjects['win']  . $MIPHANT_APP_ID . '-' . $MIPHANT_APP_VERSION . '-win.zip')) {
+        echo translate('Finish!') . $newLine;
+    }
 }
