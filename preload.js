@@ -15,7 +15,7 @@ contextBridge.exposeInMainWorld('miphant', {
     openURL: (url) => ipcRenderer.invoke('appExterno', url),
     translate: (text, ...values) => ipcRenderer.invoke('appTraduzir', text, ...values),
     selectDirectory: () => ipcRenderer.invoke('appSelecionarDiretorio'),
-    openFile: () => ipcRenderer.invoke('appAbrirArquivo'),
+    openFile: (multi) => ipcRenderer.invoke('appAbrirArquivo', multi),
     saveFile: () => ipcRenderer.invoke('appSalvarArquivo'),
     notification: (title, text) => ipcRenderer.invoke('appNotification', title, text),
     tray: (title, tooltip, icon, menu) => ipcRenderer.invoke('appTray', title, tooltip, icon, menu),

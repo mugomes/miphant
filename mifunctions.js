@@ -16,10 +16,18 @@ module.exports = {
         });
 
         // Função para abrir arquivo
-        ipcMain.handle('appAbrirArquivo', async () => {
-            const { canceled, filePaths } = await dialog.showOpenDialog({ properties: ['openFile'] });
+        ipcMain.handle('appAbrirArquivo', async (event, multi) => {
+            let sProperties = [
+                'openFile',
+                (multi) ? 'multiSelections' : ''
+            ]
+            const { canceled, filePaths } = await dialog.showOpenDialog({ properties: sProperties });
             if (!canceled) {
-                return filePaths[0];
+                if (multi) {
+                    return filePaths;
+                } else {
+                    return filePaths[0];
+                }
             }
         });
 
