@@ -1,7 +1,7 @@
 // Copyright (C) 2025 Murilo Gomes Julio
 // SPDX-License-Identifier: MIT
 
-// Site: https://github.com/mugomes
+// Site: https://www.mugomes.com.br
 
 module.exports = class milang {
     constructor(platform, dirapp) {

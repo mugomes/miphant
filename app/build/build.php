@@ -2,7 +2,7 @@
 // Copyright (C) 2025 Murilo Gomes Julio
 // SPDX-License-Identifier: MIT
 
-// Site: https://github.com/mugomes
+// Site: https://www.mugomes.com.br
 
 include_once(__DIR__ . '/includes/config.php');
 include_once(__DIR__ . '/includes/functions.php');

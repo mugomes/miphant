@@ -2,7 +2,7 @@
 // Copyright (C) 2025 Murilo Gomes Julio
 // SPDX-License-Identifier: MIT
 
-// Site: https://github.com/mugomes
+// Site: https://www.mugomes.com.br
 
 $MIPHANT_VERSION = '4.0.0';
 $urlDownload = [

@@ -1,7 +1,7 @@
 // Copyright (C) 2025 Murilo Gomes Julio
 // SPDX-License-Identifier: MIT
 
-// Site: https://github.com/mugomes
+// Site: https://www.mugomes.com.br
 
 const { app, BrowserWindow, Menu, MenuItem, ipcMain } = require('electron');
 const path = require('path');
