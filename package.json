@@ -16,7 +16,7 @@
     "homepage": "https://github.com/mugomes/miphant/",
     "license": "MIT",
     "devDependencies": {
-        "electron": "^38.1.2",
+        "electron": "^39.2.2",
         "electron-builder": "^26.0.12"
     }
 }
