@@ -43,10 +43,8 @@ In MiPhant, you can develop applications in multiple languages. Simply create a 
 
 ## Support
 
-- https://www.asaas.com/c/girp15xsowg4dpvf (Only in Brazil)
-- https://www.asaas.com/c/0f9eydhmgg8e3mrj (Only in Brazil - Monthly)
-- https://donate.stripe.com/14kdSugShfxs9by6oo
-- https://apoia.se/profmu
+- GitHub: https://github.com/sponsors/mugomes/
+- More: https://www.mugomes.com.br/apoie.html
 
 ## License
 
