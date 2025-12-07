@@ -1,5 +1,7 @@
 <?php
 header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'");
+include_once(__DIR__ . '/functions.php');
+miphantSecurity();
 
 if (!file_exists(dirname(__FILE__) . '/pdf/')) {
     mkdir(dirname(__FILE__) . '/pdf/', 0777, true);

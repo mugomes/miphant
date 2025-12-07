@@ -1,4 +1,6 @@
 <?php
+include_once(__DIR__ . '/functions.php');
+miphantSecurity();
 $sDirLang = dirname(__FILE__) . '/langs/';
 
 if (file_exists($sDirLang . $_ENV['MIPHANT_LANG'] . '.json')) {

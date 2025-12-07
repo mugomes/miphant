@@ -4,7 +4,7 @@
 
 // Site: https://www.mugomes.com.br
 
-function miphantSecurity(): bool {
+function miphantSecurity() {
     $sPublicKey = $_ENV['MIPHANT_SECURITY_PUBLIC_KEY'];
     $sData = $_ENV['MIPHANT_SECURITY_MESSAGE'];
     $sSignature = $_ENV['MIPHANT_SECURITY_SIGNATURE'];
@@ -13,9 +13,7 @@ function miphantSecurity(): bool {
 
     $pubKey = openssl_pkey_get_public($sPublicKey);
 
-    if (openssl_verify($sData, $signature, $pubKey, OPENSSL_ALGO_SHA256) === 1) {
-        return true;
-    } else {
-        return false;
+    if (!openssl_verify($sData, $signature, $pubKey, OPENSSL_ALGO_SHA256)) {
+        exit;
     }
 }

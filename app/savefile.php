@@ -1,5 +1,7 @@
 <?php
 header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'");
+include_once(__DIR__ . '/functions.php');
+miphantSecurity();
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo $_ENV['MIPHANT_LANG']; ?>">
