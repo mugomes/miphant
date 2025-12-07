@@ -7,9 +7,9 @@ const { app, BrowserWindow, Menu, MenuItem, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const sOS = require('os');
-const { spawn, execSync } = require('child_process');
+const { spawn } = require('child_process');
 const sHttp = require('http');
-const https = require('https');
+const crypto = require('crypto');
 
 const sPlatform = sOS.platform().toLowerCase();
 const miphantPath = app.getAppPath().replace('app.asar', '');
@@ -106,11 +106,36 @@ function startMiPhantServer(win) {
         app.quit();
     }
 
+    const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
+        modulusLength: 4096, // tamanho da chave em bits
+        publicKeyEncoding: {
+            type: 'pkcs1',
+            format: 'pem'
+        },
+        privateKeyEncoding: {
+            type: 'pkcs1',
+            format: 'pem'
+        }
+    });
+
+    // mensagem que você quer assinar
+    const miphantMessage = JSON.stringify({
+        info: crypto.randomBytes(32).toString('hex')
+    });
+
+    // cria a assinatura
+    const miphantSignature = crypto.sign(
+        'sha256', Buffer.from(miphantMessage), privateKey
+    ).toString('base64');
+
     // Environment
     process.env.MIPHANT_ARGV = sArgv;
     process.env.MIPHANT_USERNAME = sOS.userInfo().username;
     process.env.MIPHANT_HOMEDIR = sOS.userInfo().homedir;
     process.env.MIPHANT_PLATFORM = sPlatform;
+    process.env.MIPHANT_SECURITY_PUBLIC_KEY = publicKey;
+    process.env.MIPHANT_SECURITY_MESSAGE = miphantMessage;
+    process.env.MIPHANT_SECURITY_SIGNATURE = miphantSignature;
 
     // Servidor
     let sCreateServer = sHttp.createServer();
