@@ -1,54 +1,193 @@
 # MiPhant
 
-MiPhant is a browser that allows you to create and run desktop applications using HTML, CSS, JavaScript and PHP.
+MiPhant is a **desktop runtime for PHP applications**, allowing you to build and distribute software for **Linux and Windows** using **PHP, HTML, CSS, and JavaScript**, running inside native desktop windows powered by Electron.
 
-The software is developed in Node, Electron and Chromium. To run PHP scripts, it runs the built-in PHP server integrated with random ports. This way, you can run multiple applications simultaneously without them interfering with each other.
+Unlike a traditional browser, MiPhant executes PHP applications locally using the **built-in PHP web server with randomly assigned ports**, ensuring application isolation, security, and the ability to run multiple apps simultaneously without conflicts.
 
-We use a static version of PHP, thanks to the excellent [static-php-cli](https://github.com/crazywhalecc/static-php-cli) project.
+---
 
-## Languages
+## ✨ Key Features
 
-In MiPhant, you can develop applications in multiple languages. Simply create a language file in JSON format in the langs folder and add the translations. When you run the application on a computer with a different language, MiPhant will detect the language and fetch the translation from the translation file.
+* Run PHP applications as native desktop software
+* Built-in PHP server with **random ports**
+* Multiple applications running simultaneously without interference
+* **Statically compiled PHP** (no external library dependencies)
+* Electron + Chromium-based rendering engine
+* Native menus and submenus
+* Multi-window support
+* Integrated PHP ↔ JavaScript communication
+* Dialogs for messages, confirmations, file open/save, and directory selection
+* System tray icon support
+* PDF export
+* DevTools integration
+* Application-wide close control
 
-## MiPhant Functions
+The PHP runtime included with MiPhant is built as a **static binary**, thanks to the excellent open source project:
+👉 [static-php-cli](https://github.com/crazywhalecc/static-php-cli)
 
-- MiPhant Version and Internal Features
-- Support for working with routes in PHP
-- Menu and Submenu
-- Dialog Boxes for Message and Confirmation
-- Dialog Boxes for Opening and Saving File and Selecting Directory
-- New Window to open in the application itself
-- Open URL in an external browser
-- Display Notification
-- Icon in the system tray
-- Export to PDF
-- Translation in JS
-- DevTools
-- Close Application
-- Env: ARGV, Username, HomeDir, Platform and Lang
+---
 
-## System Requirement
+## 🌍 Internationalization
 
-- Architecture: x64
+MiPhant provides native support for multi-language applications.
+
+To add translations, create JSON language files inside the `app/langs/` directory:
+
+```text
+app/langs/en.json
+app/langs/pt.json
+app/langs/es.json
+```
+
+The system language is detected automatically and exposed to PHP through the environment variable:
+
+```text
+MIPHANT_LANG
+```
+
+Even if your application supports only one language, the `en.json` file is required (it may be empty, but must contain valid JSON `{}`).
+
+---
+
+## 🧩 Application Structure
+
+A MiPhant application must follow this minimum structure:
+
+```text
+app/
+ ├── config/
+ │   └── config.json
+ ├── langs/
+ │   └── en.json
+ └── index.php
+```
+
+---
+
+## ⚙️ Configuration (`config.json`)
+
+Each application must define its metadata and behavior in `app/config/config.json`:
+
+```json
+{
+  "app": {
+    "id": "miphantexample",
+    "name": "MiPhant Example",
+    "version": "1.0.0",
+    "width": 800,
+    "height": 600,
+    "resizable": true,
+    "frame": true,
+    "icon": "example.png",
+    "disableAccelerationHardware": true,
+    "author": {
+      "name": "",
+      "email": "",
+      "url": ""
+    },
+    "homepage": "",
+    "license": "SEE LICENSE IN LICENSE.md",
+    "copyright": "Copyright (C) 2026 Your Name. All rights reserved."
+  },
+  "server": {
+    "perm": true,
+    "router": false
+  },
+  "dev": {
+    "menu": true,
+    "tools": false
+  }
+}
+```
+
+---
+
+## 🧠 Environment Variables
+
+MiPhant exposes system and runtime information to PHP through environment variables:
+
+* `MIPHANT_LANG` – System language (en, pt, es, ...)
+* `MIPHANT_ARGV` – Application arguments
+* `MIPHANT_USERNAME` – Current user name
+* `MIPHANT_HOMEDIR` – User home directory
+* `MIPHANT_PLATFORM` – `linux` or `win32`
+
+---
+
+## 🪟 Menus and Submenus
+
+MiPhant supports native menus via JSON definitions.
+
+Create menu files inside:
+
+```text
+app/menus/menu.json
+```
+
+Menus can open pages, run JavaScript, open URLs, define shortcuts, separators, and even open new windows with custom dimensions.
+
+---
+
+## 🔔 Dialogs and System Integration
+
+MiPhant provides enhanced dialog APIs (recommended instead of `window.alert`):
+
+* Alert dialogs
+* Confirmation dialogs
+* File open/save dialogs
+* Directory selection
+* System notifications (Linux only)
+* System tray icon
+
+---
+
+## 🗂 Database Support
+
+MiPhant includes native support for **SQLite3**, allowing local databases without external dependencies.
+
+This makes it ideal for desktop tools, offline systems, and lightweight business applications.
+
+---
+
+## 📦 Distribution
+
+You can distribute your MiPhant-based software by:
+
+* Compressing your project (`zip` or `tar.gz`)
+* Creating a custom installer using **NSIS**
+* Packaging as a **DEB** package (Linux)
+
+Always include a license with your software. If unsure, consult a legal professional.
+
+---
+
+## 🖥 System Requirements
+
+### Architecture
+
+* x64 (64-bit)
 
 ### Linux
 
-- Debian 12 or higher
-- Ubuntu 22.04 or higher
+* Ubuntu 24.04 or newer
 
 ### Windows
 
-- Windows 10 or higher
-- Visual C++ Redistributable 14.42 (Windows)
+* Windows 10 or newer
+* Visual C++ Redistributable 14.42
+
+---
 
 ## Support
 
-- GitHub: https://github.com/sponsors/mugomes/
-- More: https://www.mugomes.com.br/apoie.html
+* GitHub Sponsors: [https://github.com/sponsors/mugomes/](https://github.com/sponsors/mugomes/)
+* More options: [https://mugomes.github.io/apoie.html](https://mugomes.github.io/apoie.html)
 
-## License
+---
 
-Copyright (c) 2025 Murilo Gomes Julio
+## 📄 License
+
+Copyright (c) 2025-2026 Murilo Gomes Julio
 
 Licensed under the [MIT](https://github.com/mugomes/miphant/blob/main/LICENSE) license.
 
