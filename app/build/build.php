@@ -1,8 +1,8 @@
 <?php
-// Copyright (C) 2025 Murilo Gomes Julio
+// Copyright (C) 2025-2026 Murilo Gomes Julio
 // SPDX-License-Identifier: MIT
 
-// Site: https://www.mugomes.com.br
+// Site: https://mugomes.github.io
 
 include_once(__DIR__ . '/includes/config.php');
 include_once(__DIR__ . '/includes/functions.php');
@@ -51,7 +51,10 @@ if (!empty($pathProjects['linux'])) {
     echo translate('Copying the project app folder') . $newLine;
     copyFolder(dirname(__FILE__, 2), $pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/app/');
     copyFolder(dirname(__FILE__, 3) . '/php/', $pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/php/');
-    unlink($pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/php/php.exe');
+
+    if (file_exists($pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/php/php.exe')) {
+        unlink($pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/php/php.exe');
+    }
 
     // Remove Build
     echo translate('Deleting build folder...') . $newLine;
@@ -103,7 +106,10 @@ if (!empty($pathProjects['win'])) {
     echo translate('Copying the project app folder') . $newLine;
     copyFolder(dirname(__FILE__, 2), $pathProjects['win'] . $MIPHANT_APP_ID . '/resources/app/');
     copyFolder(dirname(__FILE__, 3) . '/php/', $pathProjects['win'] . $MIPHANT_APP_ID . '/resources/php/');
-    unlink($pathProjects['win'] . $MIPHANT_APP_ID . '/resources/php/php');
+
+    if (file_exists($pathProjects['win'] . $MIPHANT_APP_ID . '/resources/php/php')) {
+        unlink($pathProjects['win'] . $MIPHANT_APP_ID . '/resources/php/php');
+    }
 
     // Remove Build
     echo translate('Deleting build folder...') . $newLine;
