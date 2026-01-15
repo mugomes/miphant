@@ -1,8 +1,8 @@
 <?php
-// Copyright (C) 2025 Murilo Gomes Julio
+// Copyright (C) 2025-2026 Murilo Gomes Julio
 // SPDX-License-Identifier: MIT
 
-// Site: https://www.mugomes.com.br
+// Site: https://mugomes.github.io
 
 function excluirRecursivamente(string $diretorio): bool
 {
@@ -32,15 +32,20 @@ function downloadFile($url, $filename)
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($ch, CURLOPT_FAILONERROR, true);
     curl_setopt($ch, CURLOPT_TIMEOUT, 300);
+    curl_setopt($ch, CURLOPT_FORBID_REUSE, TRUE);
     curl_setopt($ch, CURLOPT_USERAGENT, 'MiPhantDownloader/1.0');
 
     if (!curl_exec($ch)) {
         $err = curl_error($ch);
-        curl_close($ch);
+        if (version_compare(PHP_VERSION, '8.5', '<')) {
+            curl_close($ch);
+        }
         fclose($fp);
         exit('Erro: ' . $err);
     }
-    curl_close($ch);
+    if (version_compare(PHP_VERSION, '8.5', '<')) {
+        curl_close($ch);
+    }
     fclose($fp);
 }
 
