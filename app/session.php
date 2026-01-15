@@ -1,7 +1,5 @@
 <?php
 header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'");
-include_once(__DIR__ . '/functions.php');
-miphantSecurity();
 
 session_name('miphant');
 session_start();
