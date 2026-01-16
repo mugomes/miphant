@@ -3,7 +3,7 @@
 
 // Site: https://mugomes.github.io
 
-const { app, BrowserWindow, Menu, MenuItem, ipcMain } = require('electron');
+const { app, BrowserWindow, Menu, MenuItem, protocol, session, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const sOS = require('os');
@@ -13,6 +13,19 @@ const crypto = require('crypto');
 
 const sPlatform = sOS.platform().toLowerCase();
 const miphantPath = app.getAppPath().replace('app.asar', '');
+
+protocol.registerSchemesAsPrivileged([
+    {
+        scheme: 'miphant',
+        privileges: {
+            standard: true,
+            secure: true,
+            supportFetchAPI: true,
+            corsEnabled: true,
+            allowServiceWorkers: true
+        }
+    }
+]);
 
 // Argumentos
 let sArgs = process.argv;
@@ -93,6 +106,91 @@ function perm(filephp) {
 }
 
 // Inicia o MiPhantServer
+function runProtocol(win, servername, extraHeaders) {
+    protocol.handle('miphant', async (request) => {
+        try {
+            const url = new URL(request.url);
+            const targetUrl = `${servername}${url.pathname}${url.search}`;
+
+            // 1. Recuperar cookies já salvos no Electron para o servidor PHP
+            const cookies = await session.defaultSession.cookies.get({ url: servername });
+            const cookieString = cookies.map(c => `${c.name}=${c.value}`).join('; ');
+
+            const fetchOptions = {
+                method: request.method,
+                headers: {
+                    ...Object.fromEntries(request.headers.entries()), // Mantém headers originais
+                    'X-MiPhant-Internal': '1',
+                    ...extraHeaders,
+                    'Cookie': cookieString, // Injeta os cookies salvos
+                },
+                // Repassa o corpo apenas se não for GET ou HEAD
+                body: ['GET', 'HEAD'].includes(request.method) ? null : await request.arrayBuffer(),
+                credentials: 'include',
+                redirect: 'manual' // Capturamos o redirecionamento para tratar a URL miphant://
+            };
+
+            // 2. Executa a requisição ao servidor PHP
+            const response = await fetch(targetUrl, fetchOptions);
+
+            // 3. Capturar e Salvar novos Cookies vindos do PHP (Set-Cookie)
+            const setCookieHeader = response.headers.get('set-cookie');
+            if (setCookieHeader) {
+                const cookiesArray = setCookieHeader.split(/,(?=[^;]+?=)/);
+                for (const cookieStr of cookiesArray) {
+                    const mainPart = cookieStr.split(';')[0].trim();
+                    const equalsIndex = mainPart.indexOf('=');
+
+                    if (equalsIndex !== -1) {
+                        const name = mainPart.substring(0, equalsIndex);
+                        const value = mainPart.substring(equalsIndex + 1).replace(/[\x00-\x1F\x7F]/g, "");
+
+                        try {
+                            await session.defaultSession.cookies.set({
+                                url: servername,
+                                name: name,
+                                value: value,
+                                path: '/',
+                                // Alterado de 'no_restriction' para 'lax' para aceitar em HTTP
+                                sameSite: 'lax',
+                                secure: false
+                            });
+                        } catch (cookieError) {
+                            console.error("Erro ao gravar cookie:", cookieError.message);
+                        }
+                    }
+                }
+            }
+
+            // 4. Tratar Redirecionamentos (Comum em Formulários PHP)
+            if (response.status >= 300 && response.status < 400) {
+                const location = response.headers.get('location');
+                if (location) {
+                    // Se o PHP redirecionar para 'index.php', vira 'miphant://app/index.php'
+                    const redirectUrl = new URL(location, 'miphant://app').href;
+                    return new Response(null, {
+                        status: response.status,
+                        headers: { 'Location': redirectUrl }
+                    });
+                }
+            }
+
+            // 5. Retornar a resposta para o Electron carregar a página
+            const buffer = await response.arrayBuffer();
+            return new Response(buffer, {
+                status: response.status,
+                headers: response.headers
+            });
+
+        } catch (err) {
+            console.error("Erro no protocolo miphant:", err);
+            return new Response('Internal Error', { status: 500 });
+        }
+    });
+
+    win.loadURL('miphant://app');
+}
+
 function startMiPhantServer(win) {
     let sMiPhantServer;
     let sFilePHPINI = path.join(miphantPath, '/php/php.ini');
@@ -106,27 +204,27 @@ function startMiPhantServer(win) {
         app.quit();
     }
 
-    // const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
-    //     modulusLength: 4096, // tamanho da chave em bits
-    //     publicKeyEncoding: {
-    //         type: 'pkcs1',
-    //         format: 'pem'
-    //     },
-    //     privateKeyEncoding: {
-    //         type: 'pkcs1',
-    //         format: 'pem'
-    //     }
-    // });
+    const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
+        modulusLength: 4096, // tamanho da chave em bits
+        publicKeyEncoding: {
+            type: 'pkcs1',
+            format: 'pem'
+        },
+        privateKeyEncoding: {
+            type: 'pkcs1',
+            format: 'pem'
+        }
+    });
 
     // mensagem que você quer assinar
-    // const miphantMessage = JSON.stringify({
-    //     info: crypto.randomBytes(32).toString('hex')
-    // });
+    const miphantMessage = JSON.stringify({
+        info: crypto.randomBytes(32).toString('hex')
+    });
 
     // cria a assinatura
-    // const miphantSignature = crypto.sign(
-    //     'sha256', Buffer.from(miphantMessage), privateKey
-    // ).toString('base64');
+    const miphantSignature = crypto.sign(
+        'sha256', Buffer.from(miphantMessage), privateKey
+    ).toString('base64');
 
     // Environment
     process.env.MIPHANT_ARGV = sArgv;
@@ -165,7 +263,24 @@ function startMiPhantServer(win) {
             lsof.stdout.on('data', (data) => {
                 console.log(milang.traduzir('Server has been started successfully.'));
                 sServerName = `http://127.0.0.1:${sPort}/`;
-                win.loadURL(sServerName);
+
+                // const cleanPublicKey = publicKey
+                //     .replace(/-----BEGIN RSA PUBLIC KEY-----/g, '')
+                //     .replace(/-----END RSA PUBLIC KEY-----/g, '')
+                //     .replace(/\s+/g, '') // Remove todos os espaços e quebras de linha
+                //     .trim();
+
+                const base64PubKey = Buffer.from(publicKey).toString('base64');
+                const base64Msg = Buffer.from(miphantMessage).toString('base64');
+                const base64Sig = Buffer.from(miphantSignature).toString('base64');
+
+                let extraHeaders = {
+                    'MIPHANT-SECURITY-PUBLIC-KEY': base64PubKey,
+                    'MIPHANT-SECURITY-MESSAGE': base64Msg,
+                    'MIPHANT-SECURITY-SIGNATURE': base64Sig
+                }
+
+                runProtocol(win, sServerName, extraHeaders);
                 clearInterval(checkPortL);
             });
 
@@ -202,11 +317,23 @@ function startMiPhantServer(win) {
             findstr.stdout.on('data', (data) => {
                 console.log(milang.traduzir('PHP server started successfully.'));
                 sServerName = `http://127.0.0.1:${sPort}/`;
-                win.loadURL(sServerName);
+                //win.loadURL(sServerName);
+                const base64PubKey = Buffer.from(publicKey).toString('base64');
+                const base64Msg = Buffer.from(miphantMessage).toString('base64');
+                const base64Sig = Buffer.from(miphantSignature).toString('base64');
+
+                let extraHeaders = `MIPHANT-SECURITY-PUBLIC-KEY: ${base64PubKey}\n
+MIPHANT-SECURITY-MESSAGE: ${base64Msg}\n
+MIPHANT-SECURITY-SIGNATURE: ${base64Sig}\n`
+
+
+                runProtocol(win, sServerName, extraHeaders);
                 clearInterval(checkPortW);
             });
         }, 1000);
     }
+
+
 
     miphantserverProcess.unref(); // Permite que o aplicativo seja fechado sem fechar o processo do servidor
 }
@@ -254,11 +381,11 @@ function miphantNewWindow(url, width, height, resizable, frame, hide) {
 
         sStartApp = false;
     } else {
-        sNewWindow.loadURL(`${sServerName}/${url.replace(sServerName, '')}`);
+        sNewWindow.loadURL(`miphant://app/${url.replace('miphant://app', '')}`);
     }
 
-    if (url.replace(sServerName, '') && fs.existsSync(path.join(miphantPath, '/app/menus/', url.replace(sServerName, '').replace('.php', '.json')))) {
-        createMenu(sNewWindow, url.replace(sServerName, '').replace('.php', ''));
+    if (url.replace('miphant://app', '') && fs.existsSync(path.join(miphantPath, '/app/menus/', url.replace('miphant://app', '').replace('.php', '.json')))) {
+        createMenu(sNewWindow, url.replace('miphant://app', '').replace('.php', ''));
     }
 
     if (config.dev.tools) {
@@ -289,7 +416,7 @@ function getMenuTemplate(win, menuData) {
                 {
                     label: milang.traduzir('Build'),
                     click: () => {
-                        win.loadURL(sServerName + '/build/build.php');
+                        win.loadURL('miphant://app/build/build.php');
                     }
                 },
                 {
@@ -338,7 +465,7 @@ function getMenuTemplate(win, menuData) {
                             if (menuData[sKey][sSubMenuKey].newwindow) {
                                 miphantNewWindow(menuData[sKey][sSubMenuKey].page, menuData[sKey][sSubMenuKey].width, menuData[sKey][sSubMenuKey].height, menuData[sKey][sSubMenuKey].resizable, menuData[sKey][sSubMenuKey].frame, menuData[sKey][sSubMenuKey].menu, menuData[sKey][sSubMenuKey].hide)
                             } else {
-                                win.loadURL(sServerName + menuData[sKey][sSubMenuKey].page);
+                                win.loadURL('miphant://app/' + menuData[sKey][sSubMenuKey].page);
                             }
                         } else if (menuData[sKey][sSubMenuKey].url) {
                             require('electron').shell.openExternal(menuData[sKey][sSubMenuKey].url);
