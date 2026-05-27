@@ -133,10 +133,8 @@ dist
 icon/miphant.ico
 icon/miphant.png
 
-# php
-php/LICENSE
-php/php
-php/php.exe
+# server
+server/
 
 # packages
 packages/
