@@ -2,7 +2,7 @@
 	"app": {
 		"id": "miphant",
 		"name": "MiPhant",
-		"version": "4.1.0",
+		"version": "4.2.0",
 		"width": 800,
 		"height": 600,
 		"resizable": true,
@@ -11,16 +11,15 @@
 		"disableAccelerationHardware": true,
 		"author": {
 			"name": "Murilo Gomes Julio",
-			"email": "mugomesoficial@gmail.com",
-			"url": "https://mugomes.github.io"
+			"email": "suporte@bluice.com.br",
+			"url": "https://www.bluice.com.br"
 		},
-		"homepage": "https://github.com/mugomes/miphant/",
+		"homepage": "https://github.com/bluiceoficial/miphant/",
 		"license": "MIT",
 		"copyright": "Copyright (C) 2025-2026 Murilo Gomes Julio"
 	},
 	"server": {
-		"perm": true,
-		"router": false
+		"perm": true
 	},
 	"dev": {
 		"menu": true,
