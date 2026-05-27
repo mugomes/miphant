@@ -193,15 +193,12 @@ function runProtocol(win, servername, extraHeaders) {
 
 function startMiPhantServer(win) {
     let sMiPhantServer;
-    let sFilePHPINI;
 
     if (sPlatform == 'linux') {
         sMiPhantServer = path.join(miphantPath, '/server/linux/frankenphp');
-        sFilePHPINI = path.join(miphantPath, '/server/linux/php.ini');
         perm(sMiPhantServer);
     } else if (sPlatform == 'win32') {
         sMiPhantServer = path.join(miphantPath, '/server/win32/frankenphp.exe');
-        sFilePHPINI = path.join(miphantPath, '/server/win32/php.ini');
     } else {
         app.quit();
     }
@@ -306,7 +303,7 @@ function startMiPhantServer(win) {
             findstr.stdout.on('data', (data) => {
                 console.log(milang.traduzir('PHP server started successfully.'));
                 sServerName = `http://127.0.0.1:${sPort}/`;
-                //win.loadURL(sServerName);
+
                 const base64PubKey = Buffer.from(publicKey).toString('base64');
                 const base64Msg = Buffer.from(miphantMessage).toString('base64');
                 const base64Sig = Buffer.from(miphantSignature).toString('base64');
@@ -321,8 +318,6 @@ MIPHANT-SECURITY-SIGNATURE: ${base64Sig}\n`
             });
         }, 1000);
     }
-
-
 
     miphantserverProcess.unref(); // Permite que o aplicativo seja fechado sem fechar o processo do servidor
 }
