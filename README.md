@@ -2,16 +2,16 @@
 
 MiPhant is a **desktop runtime for PHP applications**, allowing you to build and distribute software for **Linux and Windows** using **PHP, HTML, CSS, and JavaScript**, running inside native desktop windows powered by Electron.
 
-Unlike a traditional browser, MiPhant executes PHP applications locally using the **built-in PHP web server with randomly assigned ports**, ensuring application isolation, security, and the ability to run multiple apps simultaneously without conflicts.
+Unlike a traditional browser, MiPhant executes PHP applications locally using an **integrated local web server with randomly assigned ports**, ensuring application isolation, security, and the ability to run multiple apps simultaneously without conflicts.
 
 ---
 
 ## ✨ Key Features
 
 * Run PHP applications as native desktop software
-* Built-in PHP server with **random ports**
+* Integrated local web server with **random ports**
 * Multiple applications running simultaneously without interference
-* **Statically compiled PHP** (no external library dependencies)
+* Self-contained PHP runtime (no external dependencies required)
 * Electron + Chromium-based rendering engine
 * Native menus and submenus
 * Multi-window support
@@ -23,7 +23,7 @@ Unlike a traditional browser, MiPhant executes PHP applications locally using th
 * Application-wide close control
 
 The PHP runtime included with MiPhant is built as a **static binary**, thanks to the excellent open source project:
-👉 [static-php-cli](https://github.com/crazywhalecc/static-php-cli)
+👉 [FrankenPHP](https://github.com/php/frankenphp)
 
 ---
 
@@ -90,8 +90,7 @@ Each application must define its metadata and behavior in `app/config/config.jso
     "copyright": "Copyright (C) 2026 Your Name. All rights reserved."
   },
   "server": {
-    "perm": true,
-    "router": false
+    "perm": true
   },
   "dev": {
     "menu": true,
@@ -180,8 +179,8 @@ Always include a license with your software. If unsure, consult a legal professi
 
 ## Support
 
-* GitHub Sponsors: [https://github.com/sponsors/mugomes/](https://github.com/sponsors/mugomes/)
-* More options: [https://mugomes.github.io/apoie.html](https://mugomes.github.io/apoie.html)
+* GitHub Sponsors: [https://github.com/sponsors/bluiceoficial/](https://github.com/sponsors/bluiceoficial/)
+* More options: [https://www.bluice.com.br/apoie/](https://www.bluice.com.br/apoie/)
 
 ---
 
@@ -189,6 +188,6 @@ Always include a license with your software. If unsure, consult a legal professi
 
 Copyright (c) 2025-2026 Murilo Gomes Julio
 
-Licensed under the [MIT](https://github.com/mugomes/miphant/blob/main/LICENSE) license.
+Licensed under the [MIT](https://github.com/bluiceoficial/miphant/blob/main/LICENSE) license.
 
 All contributions to the MiPhant are subject to this license.
