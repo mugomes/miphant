@@ -1,7 +1,7 @@
 // Copyright (C) 2025-2026 Murilo Gomes Julio
 // SPDX-License-Identifier: MIT
 
-// Site: https://mugomes.github.io
+// Site: https://www.bluice.com.br
 
 const { app, BrowserWindow, Menu, MenuItem, protocol, session, ipcMain } = require('electron');
 const path = require('path');
@@ -193,13 +193,15 @@ function runProtocol(win, servername, extraHeaders) {
 
 function startMiPhantServer(win) {
     let sMiPhantServer;
-    let sFilePHPINI = path.join(miphantPath, '/php/php.ini');
+    let sFilePHPINI;
 
     if (sPlatform == 'linux') {
-        sMiPhantServer = path.join(miphantPath, '/php/php');
+        sMiPhantServer = path.join(miphantPath, '/server/linux/frankenphp');
+        sFilePHPINI = path.join(miphantPath, '/server/linux/php.ini');
         perm(sMiPhantServer);
     } else if (sPlatform == 'win32') {
-        sMiPhantServer = path.join(miphantPath, '/php/php.exe');
+        sMiPhantServer = path.join(miphantPath, '/server/win32/frankenphp.exe');
+        sFilePHPINI = path.join(miphantPath, '/server/win32/php.ini');
     } else {
         app.quit();
     }
@@ -231,9 +233,6 @@ function startMiPhantServer(win) {
     process.env.MIPHANT_USERNAME = sOS.userInfo().username;
     process.env.MIPHANT_HOMEDIR = sOS.userInfo().homedir;
     process.env.MIPHANT_PLATFORM = sPlatform;
-    // process.env.MIPHANT_SECURITY_PUBLIC_KEY = publicKey;
-    // process.env.MIPHANT_SECURITY_MESSAGE = miphantMessage;
-    // process.env.MIPHANT_SECURITY_SIGNATURE = miphantSignature;
 
     // Servidor
     let sCreateServer = sHttp.createServer();
@@ -242,11 +241,7 @@ function startMiPhantServer(win) {
     sListen.close();
     sCreateServer.close();
 
-    if (config.server.router) {
-        miphantserverProcess = spawn(sMiPhantServer, ['-S', '127.0.0.1:' + sPort, '-c', sFilePHPINI, '-t', path.join(miphantPath, '/app/'), path.join(miphantPath, '/app/router.php')], { cwd: process.env.HOME, env: process.env });
-    } else {
-        miphantserverProcess = spawn(sMiPhantServer, ['-S', '127.0.0.1:' + sPort, '-c', sFilePHPINI, '-t', path.join(miphantPath, '/app/')], { cwd: process.env.HOME, env: process.env });
-    }
+    miphantserverProcess = spawn(sMiPhantServer, ['php-server', '--listen', '127.0.0.1:' + sPort, '-r', path.join(miphantPath, '/app/')], { cwd: process.env.HOME, env: process.env });
 
     miphantserverProcess.on('error', (err) => {
         console.error(milang.traduzir('Error starting the server:'), err);
@@ -263,12 +258,6 @@ function startMiPhantServer(win) {
             lsof.stdout.on('data', (data) => {
                 console.log(milang.traduzir('Server has been started successfully.'));
                 sServerName = `http://127.0.0.1:${sPort}/`;
-
-                // const cleanPublicKey = publicKey
-                //     .replace(/-----BEGIN RSA PUBLIC KEY-----/g, '')
-                //     .replace(/-----END RSA PUBLIC KEY-----/g, '')
-                //     .replace(/\s+/g, '') // Remove todos os espaços e quebras de linha
-                //     .trim();
 
                 const base64PubKey = Buffer.from(publicKey).toString('base64');
                 const base64Msg = Buffer.from(miphantMessage).toString('base64');
