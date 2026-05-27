@@ -2,7 +2,7 @@
 // Copyright (C) 2025-2026 Murilo Gomes Julio
 // SPDX-License-Identifier: MIT
 
-// Site: https://mugomes.github.io
+// Site: https://www.bluice.com.br
 
 $sText = php_sapi_name() == 'cli' ? '' : json_decode(file_get_contents(dirname(__FILE__, 3) . '/langs/' . $_ENV['MIPHANT_LANG'] . '.json'), true);
 function translate($text, ...$values): string
