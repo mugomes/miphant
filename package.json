@@ -10,14 +10,14 @@
     },
     "author": {
         "name": "Murilo Gomes Julio",
-        "email": "mugomesoficial@gmail.com",
-        "url": "https://www.mugomes.com.br"
+        "email": "suporte@bluice.com.br",
+        "url": "https://www.bluice.com.br"
     },
     "copyright": "Copyright (C) 2025-2026 Murilo Gomes Julio",
-    "homepage": "https://github.com/mugomes/miphant/",
+    "homepage": "https://github.com/bluiceoficial/miphant/",
     "license": "MIT",
     "devDependencies": {
-        "electron": "^39.2.7",
+        "electron": "^42.3.0",
         "electron-builder": "^26.4.0"
     }
 }
