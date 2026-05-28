@@ -21,7 +21,7 @@ function excluirRecursivamente(string $diretorio): bool
     return rmdir($diretorio . '/');
 }
 
-function downloadFile($url, $filename)
+function downloadFile(string $url, string $filename)
 {
     $url = $url;
     $saveTo = $filename;
@@ -38,18 +38,18 @@ function downloadFile($url, $filename)
     if (!curl_exec($ch)) {
         $err = curl_error($ch);
         if (version_compare(PHP_VERSION, '8.5', '<')) {
-            curl_close($ch);
+            unset($ch);
         }
         fclose($fp);
         exit('Erro: ' . $err);
     }
     if (version_compare(PHP_VERSION, '8.5', '<')) {
-        curl_close($ch);
+        unset($ch);
     }
     fclose($fp);
 }
 
-function extractFile($pathFile)
+function extractFile(string $pathFile)
 {
     global $newLine;
 
@@ -76,7 +76,7 @@ function extractFile($pathFile)
 }
 
 // Copy Folder
-function copyFolder($source, $dest)
+function copyFolder(string $source, string $dest)
 {
     if (!is_dir($source)) return false;
 
@@ -99,7 +99,7 @@ function copyFolder($source, $dest)
 }
 
 // Zip
-function addFolderToZip($folder, $zip, $parentFolder = '')
+function addFolderToZip(string $folder, mixed $zip, string $parentFolder = '')
 {
     $handle = opendir($folder);
     while (($file = readdir($handle)) !== false) {
@@ -117,7 +117,7 @@ function addFolderToZip($folder, $zip, $parentFolder = '')
     closedir($handle);
 }
 
-function zipFolder($source, $zipFile)
+function zipFolder(string $source, string $zipFile)
 {
     if (!is_dir($source)) return false;
 

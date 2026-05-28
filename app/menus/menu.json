@@ -19,7 +19,10 @@
         "Cookies": {
             "page": "cookies.php",
             "key": "CTRL+K",
-            "newwindow": true
+            "newwindow": true,
+            "width": 100,
+            "height": 100,
+            "resizable": false
         },
         "Include": {
             "page": "include.php",
@@ -57,7 +60,7 @@
     "About":
     {
         "Support MiPhant": {
-            "url": "https://github.com/mugomes/miphant",
+            "url": "https://github.com/bluiceoficial/miphant",
             "key": "F1"
         }
     }

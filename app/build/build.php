@@ -4,6 +4,11 @@
 
 // Site: https://www.bluice.com.br
 
+header("Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'");
+include_once(dirname(__FILE__, 2) . '/security.php');
+
+miphantSecurity();
+
 include_once(__DIR__ . '/includes/config.php');
 include_once(__DIR__ . '/includes/functions.php');
 include_once(__DIR__ . '/includes/translate.php');
@@ -45,15 +50,19 @@ if (!empty($pathProjects['linux'])) {
     // Remove App
     echo translate('Deleting app folder...') . $newLine;
     excluirRecursivamente($pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/app/');
-    excluirRecursivamente($pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/php/');
+    if (file_exists(dirname(__FILE__, 3) . '/server/linux/')) {
+        excluirRecursivamente($pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/server/linux/');
+    }
 
     // Copy App
     echo translate('Copying the project app folder') . $newLine;
     copyFolder(dirname(__FILE__, 2), $pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/app/');
-    copyFolder(dirname(__FILE__, 3) . '/php/', $pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/php/');
+    if (file_exists(dirname(__FILE__, 3) . '/server/linux/')) {
+        copyFolder(dirname(__FILE__, 3) . '/server/linux/', $pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/server/linux/');
+    }
 
-    if (file_exists($pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/php/php.exe')) {
-        unlink($pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/php/php.exe');
+    if (file_exists($pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/server/win32/')) {
+        excluirRecursivamente($pathProjects['linux'] . $MIPHANT_APP_ID . '/resources/server/win32/');
     }
 
     // Remove Build
@@ -100,15 +109,19 @@ if (!empty($pathProjects['win'])) {
     // Remove App
     echo translate('Deleting app folder...') . $newLine;
     excluirRecursivamente($pathProjects['win'] . $MIPHANT_APP_ID . '/resources/app/');
-    excluirRecursivamente($pathProjects['win'] . $MIPHANT_APP_ID . '/resources/php/');
+    if (file_exists(dirname(__FILE__, 3) . '/server/win32')) {
+        excluirRecursivamente($pathProjects['win'] . $MIPHANT_APP_ID . '/resources/server/win32/');
+    }
 
     // Copy App
     echo translate('Copying the project app folder') . $newLine;
     copyFolder(dirname(__FILE__, 2), $pathProjects['win'] . $MIPHANT_APP_ID . '/resources/app/');
-    copyFolder(dirname(__FILE__, 3) . '/php/', $pathProjects['win'] . $MIPHANT_APP_ID . '/resources/php/');
+    if (file_exists(dirname(__FILE__, 3) . '/server/win32')) {
+        copyFolder(dirname(__FILE__, 3) . '/server/win32', $pathProjects['win'] . $MIPHANT_APP_ID . '/resources/server/win32');
+    }
 
-    if (file_exists($pathProjects['win'] . $MIPHANT_APP_ID . '/resources/php/php')) {
-        unlink($pathProjects['win'] . $MIPHANT_APP_ID . '/resources/php/php');
+    if (file_exists($pathProjects['win'] . $MIPHANT_APP_ID . '/resources/server/linux/')) {
+        excluirRecursivamente($pathProjects['win'] . $MIPHANT_APP_ID . '/resources/server/linux/');
     }
 
     // Remove Build
@@ -117,7 +130,7 @@ if (!empty($pathProjects['win'])) {
 
     // Rename Executable
     echo translate('Renaming Executable') . $newLine;
-    rename($pathProjects['win'] . $MIPHANT_APP_ID . '/MiPhant.exe', $pathProjects['win'] . $MIPHANT_APP_ID . '/' . getConfig('app', 'id') . '.exe');
+    rename($pathProjects['win'] . $MIPHANT_APP_ID . '/miphant.exe', $pathProjects['win'] . $MIPHANT_APP_ID . '/' . getConfig('app', 'id') . '.exe');
 
     // Obfuscator
     include_once(__DIR__ . '/obfuscator.php');

@@ -6,7 +6,6 @@
 
 function miphantSecurity()
 {
-    echo getenv('http');
     if (
         !empty($_SERVER['HTTP_MIPHANT_SECURITY_PUBLIC_KEY']) &&
         !empty($_SERVER['HTTP_MIPHANT_SECURITY_MESSAGE']) &&
@@ -21,9 +20,11 @@ function miphantSecurity()
         $pubKey = openssl_pkey_get_public($sPublicKey);
 
         if (!openssl_verify($sData, $signature, $pubKey, OPENSSL_ALGO_SHA256)) {
+            header('HTTP/1.1 404 Not Found');
             exit;
         }
     } else {
+        header('HTTP/1.1 404 Not Found');
         exit;
     }
 }
