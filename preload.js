@@ -17,6 +17,7 @@ contextBridge.exposeInMainWorld('miphant', {
     selectDirectory: () => ipcRenderer.invoke('appSelecionarDiretorio'),
     openFile: (multi) => ipcRenderer.invoke('appAbrirArquivo', multi),
     saveFile: () => ipcRenderer.invoke('appSalvarArquivo'),
+    fileExists: (filename) => ipcRenderer.invoke('appFileExists', filename),
     notification: (title, text) => ipcRenderer.invoke('appNotification', title, text),
     tray: (title, tooltip, icon, menu) => ipcRenderer.invoke('appTray', title, tooltip, icon, menu),
     exportPDF: (filename, options) => ipcRenderer.invoke('appExportPDF', filename, options),

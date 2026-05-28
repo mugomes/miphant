@@ -16,7 +16,7 @@ module.exports = {
         });
 
         // Função para abrir arquivo
-        ipcMain.handle('appAbrirArquivo', async (event, multi) => {
+        ipcMain.handle('appAbrirArquivo', async (_, multi) => {
             let sProperties = [
                 'openFile',
                 (multi) ? 'multiSelections' : ''
@@ -40,12 +40,12 @@ module.exports = {
         });
 
         // Abrir aplicativo externo
-        ipcMain.handle('appExterno', async (event, url) => {
+        ipcMain.handle('appExterno', async (_, url) => {
             require('electron').shell.openExternal(url);
         });
 
         // Obter versão do aplicativo e recursos
-        ipcMain.handle('appVersao', async (event, tipo) => {
+        ipcMain.handle('appVersao', async (_, tipo) => {
             if (tipo == 'miphant') {
                 return require('electron').app.getVersion();
             } else if (tipo == 'electron') {
@@ -60,7 +60,7 @@ module.exports = {
         });
 
         // Função para caixa de alerta
-        ipcMain.handle('appMessage', async (event, title, msg, type, button) => {
+        ipcMain.handle('appMessage', async (_, title, msg, type, button) => {
             let sButtons = [button];
 
             let options = {
@@ -75,7 +75,7 @@ module.exports = {
         });
 
         // Função para caixa de confirmação
-        ipcMain.handle('appConfirm', async (event, title, msg, type, ...buttons) => {
+        ipcMain.handle('appConfirm', async (_, title, msg, type, ...buttons) => {
             let sButtons = [...buttons];
 
             let options = {
@@ -90,64 +90,73 @@ module.exports = {
         });
 
         // Abre uma nova janela personalizada
-        ipcMain.handle('appNewWindow', async (event, url, width, height, resizable, frame, menu, hide) => {
+        ipcMain.handle('appNewWindow', async (_, url, width, height, resizable, frame, menu, hide) => {
             miphantNewWindow(url, width, height, resizable, frame, menu, hide);
         });
 
         // Traduzir
-        ipcMain.handle('appTraduzir', async (event, text, ...values) => {
+        ipcMain.handle('appTraduzir', async (_, text, ...values) => {
             return milang.traduzir(text, ...values);
         });
 
         // DevTools
-        ipcMain.handle('appDevTools', async (event) => {
+        ipcMain.handle('appDevTools', async (_) => {
             BrowserWindow.getFocusedWindow().webContents.appDevTools();
         });
 
         // Notification
-        ipcMain.handle('appNotification', async (event, title, text) => {
+        ipcMain.handle('appNotification', async (_, title, text) => {
             let { Notification } = require('electron');
             new Notification({ title: title, body: text }).show();
         });
 
         // Tray
-        ipcMain.handle('appTray', async (event, title, tooltip, image, menus) => {
-            const { Tray, Menu, nativeImage } = require('electron');
-            const icon = nativeImage.createFromPath(image);
-            let tray = new Tray(icon);
+        let sTrayExists = false;
+        ipcMain.handle('appTray', async (_, title, tooltip, image, menus) => {
+            if (!sTrayExists) {
+                const { Tray, Menu, nativeImage } = require('electron');
+                const icon = nativeImage.createFromPath(image);
+                let tray = new Tray(icon);
 
-            let template = [];
+                let template = [];
 
-            let menuData = JSON.parse(menus);
+                let menuData = JSON.parse(menus);
 
-            Object.keys(menuData).forEach((key) => {
-                template.push({
-                    label: milang.traduzir(key),
-                    type: menuData[key].type,
-                    click: () => {
-                        if (menuData[key].page) {
-                            if (menuData[key].newwindow) {
-                                win.webContents.executeJavaScript(`window.open('${menuData[key].page}');`);
+                Object.keys(menuData).forEach((key) => {
+                    template.push({
+                        label: milang.traduzir(key),
+                        type: menuData[key].type,
+                        click: () => {
+                            if (menuData[key].page) {
+                                if (menuData[key].newwindow) {
+                                    win.webContents.executeJavaScript(`window.open('${menuData[key].page}');`);
+                                } else {
+                                    win.webContents.executeJavaScript(`window.location.assign('${menuData[key].page}');`);
+                                }
                             } else {
-                                win.webContents.executeJavaScript(`window.location.assign('${menuData[key].page}');`);
+                                win.webContents.executeJavaScript(menuData[key].script);
                             }
-                        } else {
-                            win.webContents.executeJavaScript(menuData[key].script);
                         }
-                    }
+                    });
                 });
-            });
 
-            const contextMenu = Menu.buildFromTemplate(template);
-            tray.setContextMenu(contextMenu);
-            tray.setToolTip(tooltip);
-            tray.setTitle(title);
+                const contextMenu = Menu.buildFromTemplate(template);
+                tray.setContextMenu(contextMenu);
+                tray.setToolTip(tooltip);
+                tray.setTitle(title);
+
+                sTrayExists = true;
+            }
+        });
+
+        // Check File Exists
+        ipcMain.handle('appFileExists', async(_, filename) => {
+            return require('fs').existsSync(filename);
         });
 
         // ExportPDF
-        ipcMain.handle('appExportPDF', async (event, filename, options) => {
+        ipcMain.handle('appExportPDF', async (_, filename, options) => {
             const fs = require('fs');
-            const pdfPath = filename;
 
             let pdfOptions = options;
             if (!pdfOptions) {
@@ -157,12 +166,17 @@ module.exports = {
             }
 
             BrowserWindow.getFocusedWindow().webContents.printToPDF(pdfOptions).then(data => {
-                fs.writeFile(pdfPath, data, (error) => {
+                const sPath = require('path').dirname(filename);
+                if (!fs.existsSync(sPath)) {
+                    fs.mkdirSync(sPath);
+                }
+
+                fs.writeFile(filename, data, (error) => {
                     if (error) throw error
-                    console.log(milang.traduzir('PDF successfully saved to %s', pdfPath))
+                    console.log(milang.traduzir('PDF successfully saved to %s', filename))
                 })
             }).catch(error => {
-                console.log(milang.traduzir('Error when trying to generate the PDF in %s', pdfPath), error)
+                console.log(milang.traduzir('Error when trying to generate the PDF in %s', filename), error)
             })
         });
     }
