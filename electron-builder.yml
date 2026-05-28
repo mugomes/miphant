@@ -3,12 +3,13 @@ files:
   - "!.git/**/*"
   - "!.github/**/*"
   - "!app/**/*"
-  - "!php/**/*"
+  - "!server/**/*"
   - "!packages/**/*"
   - "!config.sh"
+  - "!compile.sh"
 extraResources:
   - "./app/"
-  - "./php/"
+  - "./server/"
   - "./LICENSE"
   - "./README.md"
 win:
