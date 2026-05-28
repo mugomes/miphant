@@ -312,7 +312,6 @@ function startMiPhantServer(win) {
 MIPHANT-SECURITY-MESSAGE: ${base64Msg}\n
 MIPHANT-SECURITY-SIGNATURE: ${base64Sig}\n`
 
-
                 runProtocol(win, sServerName, extraHeaders);
                 clearInterval(checkPortW);
             });
