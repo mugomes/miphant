@@ -1,5 +1,9 @@
 # MiPhant
 
+> [!NOTE]
+> This repository has been migrated to Codeberg
+> Please see: https://codeberg.org/bluice/miphant
+
 MiPhant is a **desktop runtime for PHP applications**, allowing you to build and distribute software for **Linux and Windows** using **PHP, HTML, CSS, and JavaScript**, running inside native desktop windows powered by Electron.
 
 Unlike a traditional browser, MiPhant executes PHP applications locally using an **integrated local web server with randomly assigned ports**, ensuring application isolation, security, and the ability to run multiple apps simultaneously without conflicts.
