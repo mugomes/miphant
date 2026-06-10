@@ -36,5 +36,6 @@
     "Compacting project for Linux...": "Compactando projeto para Linux...",
     "Compacting project for Win...": "Compactando projeto para Windows...",
     "Finish!": "Finish!",
-    "Could not open ZIP file.": "Could not open ZIP file."
+    "Could not open ZIP file.": "Could not open ZIP file.",
+    "Cancel": "Cancelar"
 }
