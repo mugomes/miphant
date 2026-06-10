@@ -13,8 +13,6 @@ docker run --rm -ti \
   npm run dist-win
 
 rm -rf dist/linux-unpacked/resources/server/win32/
-
-sudo chown -R bluice:bluice dist/win-unpacked/
 rm -rf dist/win-unpacked/resources/server/linux/
 
 exit 0
