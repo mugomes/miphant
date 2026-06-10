@@ -5,7 +5,7 @@
 		"version": "5.0.0",
 		"width": 800,
 		"height": 600,
-		"resizable": false,
+		"resizable": true,
 		"frame": true,
 		"icon": "miphant.png",
 		"disableAccelerationHardware": true,
@@ -19,7 +19,7 @@
 		"copyright": "Copyright (C) 2025-2026 Murilo Gomes Julio"
 	},
 	"server": {
-		"perm": false
+		"perm": true
 	},
 	"dev": {
 		"menu": true,
