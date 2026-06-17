@@ -1,4 +1,4 @@
-# MiPhant
+# MiPhantDesktop
 
 > [!NOTE]
 > This repository has been migrated to Codeberg, please see: https://codeberg.org/bluice/miphantdesktop
