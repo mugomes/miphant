@@ -1,7 +1,7 @@
 # MiPhant
 
 > [!NOTE]
-> This repository has been migrated to Codeberg, please see: https://codeberg.org/bluice/miphant
+> This repository has been migrated to Codeberg, please see: https://codeberg.org/bluice/miphantdesktop
 
 MiPhant is a **desktop runtime for PHP applications**, allowing you to build and distribute software for **Linux and Windows** using **PHP, HTML, CSS, and JavaScript**, running inside native desktop windows powered by Electron.
 
