@@ -3,13 +3,14 @@ files:
   - "!.git/**/*"
   - "!.github/**/*"
   - "!app/**/*"
-  - "!server/**/*"
+  - "!php/**/*"
   - "!packages/**/*"
   - "!config.sh"
   - "!compile.sh"
 extraResources:
   - "./app/"
-  - "./server/"
+  - "./php/LICENSE"
+  - "./php/php.ini"
   - "./LICENSE"
   - "./README.md"
 win:
@@ -17,9 +18,15 @@ win:
   icon: icon/miphant.ico
   target:
     - "dir"
+  extraResources:
+   - from: "./php/php.exe"
+     to: "php/php.exe"
 linux:
   artifactName: ${productName}-${version}-linux.${ext}
   icon: icon/miphant.png
   target:
     - "dir"
+  extraResources:
+   - from: "./php/php"
+     to: "php/php"
 publish: null
