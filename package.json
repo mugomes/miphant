@@ -1,6 +1,6 @@
 {
     "name": "miphant",
-    "version": "5.0.0",
+    "version": "4.2.0",
     "description": "MiPhant is a software that runs applications developed in PHP for desktop Linux Ubuntu and Windows.",
     "main": "main.js",
     "scripts": {
@@ -9,12 +9,12 @@
         "dist-linux": "electron-builder --linux"
     },
     "author": {
-        "name": "Murilo Gomes Julio",
-        "email": "suporte@bluice.com.br",
-        "url": "https://www.bluice.com.br"
+        "name": "Murilo Gomes",
+        "email": "profmugomes@gmail.com",
+        "url": "https://www.profmugomes.com.br"
     },
-    "copyright": "Copyright (C) 2025-2026 Murilo Gomes Julio",
-    "homepage": "https://github.com/bluiceoficial/miphant/",
+    "copyright": "Copyright (C) 2025-2026 Murilo Gomes <profmugomes.com.br>",
+    "homepage": "https://www.profmugomes.com.br",
     "license": "MIT",
     "devDependencies": {
         "electron": "^42.3.0",

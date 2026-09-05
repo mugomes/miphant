@@ -10,13 +10,13 @@
 		"icon": "miphant.png",
 		"disableAccelerationHardware": true,
 		"author": {
-			"name": "Murilo Gomes Julio",
+			"name": "Murilo Gomes",
 			"email": "profmugomes@gmail.com",
 			"url": "https://www.profmugomes.com.br"
 		},
 		"homepage": "https://github.com/profmugomes/miphant/",
 		"license": "MIT",
-		"copyright": "Copyright (C) 2025-2026 Murilo Gomes Julio"
+		"copyright": "Copyright (C) 2025-2026 Murilo Gomes <profmugomes.com.br>"
 	},
 	"server": {
 		"perm": true,

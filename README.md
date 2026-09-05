@@ -48,7 +48,7 @@ In MiPhant, you can develop applications in multiple languages. Simply create a 
 
 ## License
 
-Copyright (c) 2025 Murilo Gomes Julio
+Copyright (c) 2025-2026 Murilo Gomes <profmugomes.com.br>
 
 Licensed under the [MIT](https://github.com/profmugomes/miphant/blob/main/LICENSE) license.
 
