@@ -1,15 +1,14 @@
-// Copyright (C) 2025-2026 Murilo Gomes Julio
+// Copyright (C) 2025 Murilo Gomes Julio
 // SPDX-License-Identifier: MIT
 
-// Site: https://www.bluice.com.br
+// Site: https://www.profmugomes.com.br
 
-const { app, BrowserWindow, Menu, MenuItem, protocol, session, ipcMain } = require('electron');
+const { app, BrowserWindow, Menu, MenuItem, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const sOS = require('os');
 const { spawn } = require('child_process');
 const sHttp = require('http');
-const crypto = require('crypto');
 
 const sPlatform = sOS.platform().toLowerCase();
 const miphantPath = app.getAppPath().replace('app.asar', '');
@@ -92,17 +91,16 @@ function perm(filephp) {
     }
 }
 
+// Inicia o MiPhantServer
 function startMiPhantServer(win) {
     let sMiPhantServer;
-    let sFilePHPINI;
+    let sFilePHPINI = path.join(miphantPath, '/php/php.ini');
 
     if (sPlatform == 'linux') {
-        sMiPhantServer = path.join(miphantPath, '/server/linux/php');
-        sFilePHPINI = path.join(miphantPath, '/server/linux/php.ini');
+        sMiPhantServer = path.join(miphantPath, '/php/php');
         perm(sMiPhantServer);
     } else if (sPlatform == 'win32') {
-        sMiPhantServer = path.join(miphantPath, '/server/win32/php.exe');
-        sFilePHPINI = path.join(miphantPath, '/server/win32/php.ini');
+        sMiPhantServer = path.join(miphantPath, '/php/php.exe');
     } else {
         app.quit();
     }
@@ -126,6 +124,9 @@ function startMiPhantServer(win) {
         miphantserverProcess = spawn(sMiPhantServer, ['-S', '127.0.0.1:' + sPort, '-c', sFilePHPINI, '-t', path.join(miphantPath, '/app/')], { cwd: process.env.HOME, env: process.env });
     }
 
+    miphantserverProcess.stdout.resume();
+    miphantserverProcess.stderr.resume();
+
     miphantserverProcess.on('error', (err) => {
         console.error(milang.traduzir('Error starting the server:'), err);
     });
@@ -141,8 +142,7 @@ function startMiPhantServer(win) {
             lsof.stdout.on('data', (data) => {
                 console.log(milang.traduzir('Server has been started successfully.'));
                 sServerName = `http://127.0.0.1:${sPort}/`;
-
-                sNewWindow.loadURL(sServerName);
+                win.loadURL(sServerName);
                 clearInterval(checkPortL);
             });
 
@@ -179,8 +179,7 @@ function startMiPhantServer(win) {
             findstr.stdout.on('data', (data) => {
                 console.log(milang.traduzir('PHP server started successfully.'));
                 sServerName = `http://127.0.0.1:${sPort}/`;
-
-                sNewWindow.loadURL(sServerName);
+                win.loadURL(sServerName);
                 clearInterval(checkPortW);
             });
         }, 1000);
@@ -232,11 +231,11 @@ function miphantNewWindow(url, width, height, resizable, frame, hide) {
 
         sStartApp = false;
     } else {
-        sNewWindow.loadURL(`miphant://app/${url.replace('miphant://app', '')}`);
+        sNewWindow.loadURL(`${sServerName}/${url.replace(sServerName, '')}`);
     }
 
-    if (url.replace('miphant://app', '') && fs.existsSync(path.join(miphantPath, '/app/menus/', url.replace('miphant://app', '').replace('.php', '.json')))) {
-        createMenu(sNewWindow, url.replace('miphant://app', '').replace('.php', ''));
+    if (url.replace(sServerName, '') && fs.existsSync(path.join(miphantPath, '/app/menus/', url.replace(sServerName, '').replace('.php', '.json')))) {
+        createMenu(sNewWindow, url.replace(sServerName, '').replace('.php', ''));
     }
 
     if (config.dev.tools) {
@@ -267,7 +266,7 @@ function getMenuTemplate(win, menuData) {
                 {
                     label: milang.traduzir('Build'),
                     click: () => {
-                        win.loadURL('miphant://app/build/build.php');
+                        win.loadURL(sServerName + '/build/build.php');
                     }
                 },
                 {
@@ -316,7 +315,7 @@ function getMenuTemplate(win, menuData) {
                             if (menuData[sKey][sSubMenuKey].newwindow) {
                                 miphantNewWindow(menuData[sKey][sSubMenuKey].page, menuData[sKey][sSubMenuKey].width, menuData[sKey][sSubMenuKey].height, menuData[sKey][sSubMenuKey].resizable, menuData[sKey][sSubMenuKey].frame, menuData[sKey][sSubMenuKey].menu, menuData[sKey][sSubMenuKey].hide)
                             } else {
-                                win.loadURL('miphant://app/' + menuData[sKey][sSubMenuKey].page);
+                                win.loadURL(sServerName + menuData[sKey][sSubMenuKey].page);
                             }
                         } else if (menuData[sKey][sSubMenuKey].url) {
                             require('electron').shell.openExternal(menuData[sKey][sSubMenuKey].url);

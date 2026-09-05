@@ -1,7 +1,7 @@
-// Copyright (C) 2025-2026 Murilo Gomes Julio
+// Copyright (C) 2025 Murilo Gomes Julio
 // SPDX-License-Identifier: MIT
 
-// Site: https://www.bluice.com.br
+// Site: https://www.profmugomes.com.br
 
 const { contextBridge, ipcRenderer } = require('electron')
 
@@ -17,7 +17,6 @@ contextBridge.exposeInMainWorld('miphant', {
     selectDirectory: () => ipcRenderer.invoke('appSelecionarDiretorio'),
     openFile: (multi) => ipcRenderer.invoke('appAbrirArquivo', multi),
     saveFile: () => ipcRenderer.invoke('appSalvarArquivo'),
-    fileExists: (filename) => ipcRenderer.invoke('appFileExists', filename),
     notification: (title, text) => ipcRenderer.invoke('appNotification', title, text),
     tray: (title, tooltip, icon, menu) => ipcRenderer.invoke('appTray', title, tooltip, icon, menu),
     exportPDF: (filename, options) => ipcRenderer.invoke('appExportPDF', filename, options),
