@@ -1,8 +1,8 @@
 <?php
-// Copyright (C) 2025-2026 Murilo Gomes Julio
+// Copyright (C) 2025 Murilo Gomes Julio
 // SPDX-License-Identifier: MIT
 
-// Site: https://www.bluice.com.br
+// Site: https://www.profmugomes.com.br
 
 function excluirRecursivamente(string $diretorio): bool
 {
@@ -21,7 +21,7 @@ function excluirRecursivamente(string $diretorio): bool
     return rmdir($diretorio . '/');
 }
 
-function downloadFile(string $url, string $filename)
+function downloadFile($url, $filename)
 {
     $url = $url;
     $saveTo = $filename;
@@ -32,24 +32,19 @@ function downloadFile(string $url, string $filename)
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($ch, CURLOPT_FAILONERROR, true);
     curl_setopt($ch, CURLOPT_TIMEOUT, 300);
-    curl_setopt($ch, CURLOPT_FORBID_REUSE, TRUE);
     curl_setopt($ch, CURLOPT_USERAGENT, 'MiPhantDownloader/1.0');
 
     if (!curl_exec($ch)) {
         $err = curl_error($ch);
-        if (version_compare(PHP_VERSION, '8.5', '<')) {
-            unset($ch);
-        }
+        curl_close($ch);
         fclose($fp);
         exit('Erro: ' . $err);
     }
-    if (version_compare(PHP_VERSION, '8.5', '<')) {
-        unset($ch);
-    }
+    curl_close($ch);
     fclose($fp);
 }
 
-function extractFile(string $pathFile)
+function extractFile($pathFile)
 {
     global $newLine;
 
@@ -76,7 +71,7 @@ function extractFile(string $pathFile)
 }
 
 // Copy Folder
-function copyFolder(string $source, string $dest)
+function copyFolder($source, $dest)
 {
     if (!is_dir($source)) return false;
 
@@ -99,7 +94,7 @@ function copyFolder(string $source, string $dest)
 }
 
 // Zip
-function addFolderToZip(string $folder, mixed $zip, string $parentFolder = '')
+function addFolderToZip($folder, $zip, $parentFolder = '')
 {
     $handle = opendir($folder);
     while (($file = readdir($handle)) !== false) {
@@ -117,7 +112,7 @@ function addFolderToZip(string $folder, mixed $zip, string $parentFolder = '')
     closedir($handle);
 }
 
-function zipFolder(string $source, string $zipFile)
+function zipFolder($source, $zipFile)
 {
     if (!is_dir($source)) return false;
 

@@ -1,13 +1,13 @@
 <?php
-// Copyright (C) 2025-2026 Murilo Gomes Julio
+// Copyright (C) 2025 Murilo Gomes Julio
 // SPDX-License-Identifier: MIT
 
-// Site: https://www.bluice.com.br
+// Site: https://www.profmugomes.com.br
 
-$MIPHANT_VERSION = '5.0.0';
+$MIPHANT_VERSION = '4.0.0';
 $urlDownload = [
-    'linux' => sprintf('https://github.com/mugomes/miphant/releases/download/v%s/miphant-%s-linux.zip', $MIPHANT_VERSION, $MIPHANT_VERSION),
-    'win' => sprintf('https://github.com/mugomes/miphant/releases/download/v%s/MiPhant-%s-win.zip', $MIPHANT_VERSION, $MIPHANT_VERSION)
+    'linux' => sprintf('https://github.com/profmugomes/miphant/releases/download/v%s/miphant-%s-linux.zip', $MIPHANT_VERSION, $MIPHANT_VERSION),
+    'win' => sprintf('https://github.com/profmugomes/miphant/releases/download/v%s/MiPhant-%s-win.zip', $MIPHANT_VERSION, $MIPHANT_VERSION)
 ];
 
 $pathProjects = [

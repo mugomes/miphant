@@ -1,8 +1,9 @@
 <?php
-header("Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'");
-include_once(__DIR__ . '/security.php');
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'");
 
-miphantSecurity();
+if (!file_exists(dirname(__FILE__) . '/pdf/')) {
+    mkdir(dirname(__FILE__) . '/pdf/', 0777, true);
+}
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo $_ENV['MIPHANT_LANG']; ?>">
@@ -12,13 +13,7 @@ miphantSecurity();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF</title>
 
-    <style>
-    @media print {
-        .no-print {
-            display: none !important;
-        }
-    }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -38,18 +33,11 @@ miphantSecurity();
 
         pdf.addEventListener('click', async () => {
             <?php if ($_ENV['MIPHANT_PLATFORM'] == 'linux') { ?>
-                const sFilename = '<?php echo dirname(__FILE__) . '/pdf/example.pdf'; ?>';
+                await miphant.exportPDF('<?php echo dirname(__FILE__) . '/pdf/example.pdf'; ?>');
             <?php } else { ?>
-                const sFilename = '<?php echo str_replace('\\','\\\\', dirname(__FILE__)) . '\\\\pdf\\\\example.pdf'; ?>';
+                await miphant.exportPDF('<?php echo str_replace('\\','\\\\', dirname(__FILE__)) . '\\\\pdf\\\\example.pdf'; ?>');
             <?php } ?>
-
-            await miphant.exportPDF(sFilename);
-
-            while (!(await miphant.fileExists(sFilename))) {
-                await new Promise(resolve => setTimeout(resolve, 200));
-            }
-
-            miphant.newWindow('pdf/example.pdf');
+            miphant.newWindow('/pdf/example.pdf');
         });
     </script>
 </body>

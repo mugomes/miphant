@@ -1,8 +1,5 @@
 <?php
 header("Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'");
-include_once(__DIR__ . '/security.php');
-
-miphantSecurity();
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo $_ENV['MIPHANT_LANG']; ?>">
@@ -35,7 +32,7 @@ miphantSecurity();
     foreach ($files as $file) {
         if (!empty($file)) {
             if ($file !== '.' && $file !== '..') {
-                if (file_exists(dirname(__FILE__) . '/' . $file) && $file !== 'index.php' && $file !== 'style.css' && $file !== 'router.php' && $file !== 'security.php' && $file !== 'config.json') {
+                if (file_exists(dirname(__FILE__) . '/' . $file) && $file !== 'index.php' && $file !== 'style.css' && $file !== 'router.php') {
                     if (is_file(dirname(__FILE__) . '/' . $file)) {
                         printf('<li><a href="%s" target="_blank" rel="noopener">%s</a></li>', $file, ucfirst(str_replace('.php', '', $file)));
                     }
